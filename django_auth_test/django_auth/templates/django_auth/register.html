@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+        <h1>Register</h1>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="email" name="email" id="email" class="input" placeholder="E-mail">
+                <br>
+                <input type="password" name="password1" id="password1" class="input" placeholder="Password">
+                <br>
+                <input type="password" name="password2" id="password2" class="input" placeholder="Re-Enter Password">
+                <br>
+                <input type="submit" value="Register" class="input">
+                <p>{{ error_message }}</p>
+            </form>
+    </body>
+</html>

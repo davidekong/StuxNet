@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f1f1f1;
+}
+
+#regForm {
+  background-color: #ffffff;
+  margin: 100px auto;
+  font-family: Raleway;
+  padding: 40px;
+  width: 70%;
+  min-width: 300px;
+}
+
+h1 {
+  text-align: center;  
+}
+
+input {
+  padding: 10px;
+  width: 100%;
+  font-size: 17px;
+  font-family: Raleway;
+  border: 1px solid #aaaaaa;
+}
+
+/* Mark input boxes that gets an error on validation: */
+input.invalid {
+  background-color: #ffdddd;
+}
+
+/* Hide all steps by default: */
+.tab {
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  background-color: #04AA6D;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 17px;
+  font-family: Raleway;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+#prevBtn {
+  background-color: #bbbbbb;
+}
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;  
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+.step.active {
+  opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: #04AA6D;
+}
+</style>
+<body>
+
+
+<form id="regForm" action="" style="max-width: 500px;" method="post">
+  {% csrf_token %}
+  <!-- One "tab" for each step in the form: -->
+  <div class="tab">
+    <h1>Sign Up</h1>
+    <div class="det-row">
+      <p><input placeholder="First name..." oninput="this.className = ''" name="fname" class="fname"></p>
+      <p><input placeholder="Last name..." oninput="this.className = ''" name="lname" class="lname"></p>
+    </div>
+    <div class="det-row">
+      <p style="width: 100%;"><input placeholder="Email..." oninput="this.className = ''" name="email" class="email"></p>
+      <!-- <p><input placeholder="Phone Number..." oninput="this.className = ''" name="phone" class="phone"></p> -->
+    </div>
+    <div class="det-row">
+      <p><input placeholder="Password..." oninput="this.className = ''" name="password1" class="password1" type="password" id="password1"></p>
+      <p><input placeholder="Re-enter Password..." oninput="this.className = ''" name="password2" class="password2" type="password" id="password2"></p>
+    </div>
+    <div class="det-row">
+      <div class="constraints">
+        <div style="color: green; background-color: #04aa6d53; border: 0.5px solid green;" id="con-1"><ion-icon name="checkmark-outline" id="icon1"></ion-icon><p style="color: green;" id="p-con-1"> 8 or more characters</p></div>
+        <div style="color: red; background-color: rgba(255, 0, 0, 0.429); border: 0.5px solid red;" id="con-2"><ion-icon name="close-outline" id="icon2"></ion-icon><p style="color: red;" id="p-con-2"> At least 1 uppercase</p></div>
+      </div>
+      <div class="constraints">
+        <div style="color: red; background-color: rgba(255, 0, 0, 0.429); border: 0.5px solid red;" id="con-3"><ion-icon name="close-outline" id="icon3"></ion-icon><p style="color: red;" id="p-con-3"> At least 1 lowercase</p></div>
+        <div style="color: red; background-color: rgba(255, 0, 0, 0.429); border: 0.5px solid red;" id="con-4"><ion-icon name="close-outline" id="icon4"></ion-icon><p style="color: red;" id="p-con-4"> At least 1 symbol</p></div>
+      </div>
+    </div>
+    
+    
+    {% for error_message in error_messages %}
+    {% if error_message|length > 0 %}
+    <div style="width: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center; border: 1px solid red; background-color: rgba(255, 0, 0, 0.308); margin-top: 10px;">
+      
+      <p style="color: red;">{{ error_message }}</p>
+      
+    </div>
+    {% endif %}
+    {% endfor %}
+    
+    
+    <div style="width: 100%; display: flex; justify-content: center; align-items: center;"><div style="height: 1px; background-color: rgba(128, 128, 128, 0.441); width: 40%;"></div><p style="width: 20%; display: flex; flex-direction: row; justify-content: center; align-items: center;">OR</p><div style="height: 1px; background-color: rgba(128, 128, 128, 0.441); width: 40%;"></div></div>
+    <div class="social-accounts">
+      <a href="/accounts/signup/" class="social-account-google"><img src="/media/google.png" alt="" width="10%" height="10%"><p>Sign In With Google</p></a>
+      <a href="#" class="social-account-facebook" back><img src="/media/facebook1.png" alt="" width="15%" height="15%"><p>Sign In With Facebook</p></a>
+    </div>
+    <style>
+      .det-row {
+        display: flex;
+        flex-direction: row;
+        
+      }
+      .constraints {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .constraints div {
+        border-radius: 15px;
+        padding: 10px;
+        width: 95%;
+        margin: 5px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+      .constraints p {
+        
+        padding: 2px;
+        margin: 0px;
+      }
+      input {
+        margin: 5px;
+        border: none;
+        border-bottom: 1px solid gray;
+      }
+      .social-accounts {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+      
+      .social-account-google {
+        margin: 10px;
+        text-decoration: none;
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        padding-top: 0px;
+        
+        padding-bottom: 0px;
+        background-color: whitesmoke;
+        width: 50%;
+        border: 1px solid gray;
+        border-radius: 5px;
+      }
+
+      .social-account-facebook {
+        margin: 10px;
+        text-decoration: none;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        font-size: 15px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        background-color: #3A559F;
+        width: 50%;
+        border-radius: 5px;
+      }
+    </style>
+  </div>
+  <div class="tab">
+    <h1>Sign Up</h1>
+    <div class="tos">
+      <h1>Terms of Service</h1>
+      <h3>1. Lorem ipsum</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cursus sit amet dictum sit amet justo donec enim diam. Vitae suscipit tellus mauris a diam maecenas sed enim. Gravida in fermentum et sollicitudin ac orci phasellus. Amet consectetur adipiscing elit pellentesque habitant morbi tristique senectus et. Scelerisque eleifend donec pretium vulputate sapien nec. Donec massa sapien faucibus et. Tortor consequat id porta nibh venenatis cras. Augue mauris augue neque gravida in fermentum et. Arcu non sodales neque sodales ut. Purus ut faucibus pulvinar elementum integer enim neque volutpat. Eget dolor morbi non arcu risus. Etiam dignissim diam quis enim lobortis.
+      </p>
+      <h3>2. Lorem ipsum</h3>
+      <p>
+        Elementum tempus egestas sed sed risus pretium quam. Penatibus et magnis dis parturient montes nascetur ridiculus mus. Consequat id porta nibh venenatis. Lacus sed turpis tincidunt id aliquet risus feugiat. Facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum. Egestas diam in arcu cursus euismod. Faucibus interdum posuere lorem ipsum. Arcu felis bibendum ut tristique et. Eget dolor morbi non arcu risus quis. Gravida arcu ac tortor dignissim convallis. Tincidunt nunc pulvinar sapien et ligula. Velit ut tortor pretium viverra suspendisse potenti nullam. Ac auctor augue mauris augue neque gravida in. Gravida dictum fusce ut placerat orci. Faucibus turpis in eu mi bibendum neque egestas congue quisque. Egestas purus viverra accumsan in. Sit amet commodo nulla facilisi nullam vehicula ipsum a. Nec feugiat nisl pretium fusce id velit. Id cursus metus aliquam eleifend mi.
+      </p>
+      <h3>3. Lorem ipsum</h3>
+      <p>
+        Augue lacus viverra vitae congue eu consequat ac. Aenean sed adipiscing diam donec adipiscing tristique risus nec. Tempor id eu nisl nunc mi ipsum faucibus. Eleifend quam adipiscing vitae proin. In pellentesque massa placerat duis. Sit amet nulla facilisi morbi tempus iaculis urna id volutpat. Vitae tempus quam pellentesque nec nam aliquam sem. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Tellus at urna condimentum mattis pellentesque id nibh tortor. Donec enim diam vulputate ut pharetra sit amet aliquam id. Erat velit scelerisque in dictum non consectetur a erat nam. Adipiscing diam donec adipiscing tristique risus nec feugiat in fermentum. Sit amet nisl purus in. Eget lorem dolor sed viverra ipsum. Aliquam id diam maecenas ultricies. Elementum integer enim neque volutpat ac. Morbi tristique senectus et netus et malesuada. Tellus orci ac auctor augue mauris augue neque.
+      </p>
+      <h3>4. Lorem ipsum</h3>
+      <p>
+        Consectetur a erat nam at lectus urna duis. Pulvinar mattis nunc sed blandit libero volutpat. Mauris in aliquam sem fringilla ut morbi tincidunt. Integer enim neque volutpat ac tincidunt vitae. Suspendisse interdum consectetur libero id faucibus nisl tincidunt eget. Felis donec et odio pellentesque diam volutpat commodo. Lobortis elementum nibh tellus molestie nunc non blandit. In dictum non consectetur a erat. Viverra nibh cras pulvinar mattis nunc sed blandit. Vitae et leo duis ut diam quam nulla porttitor massa. Adipiscing bibendum est ultricies integer. Integer quis auctor elit sed vulputate mi sit. Morbi non arcu risus quis varius. Placerat vestibulum lectus mauris ultrices eros in cursus. Eu facilisis sed odio morbi quis. Ipsum dolor sit amet consectetur adipiscing elit ut aliquam purus. Magna fermentum iaculis eu non diam phasellus vestibulum lorem. Pellentesque habitant morbi tristique senectus et netus et. Velit dignissim sodales ut eu sem integer vitae justo.
+      </p>
+      <h3>5. Lorem ipsum</h3>
+      <p>
+        Est sit amet facilisis magna etiam tempor orci eu. Turpis cursus in hac habitasse platea. In hendrerit gravida rutrum quisque. Aliquam ultrices sagittis orci a scelerisque purus semper. Id porta nibh venenatis cras. Dui ut ornare lectus sit amet est placerat in egestas. Placerat vestibulum lectus mauris ultrices eros in cursus turpis. Etiam non quam lacus suspendisse faucibus interdum posuere lorem ipsum. Nisl suscipit adipiscing bibendum est ultricies integer quis auctor. Sed turpis tincidunt id aliquet risus feugiat in. Eget egestas purus viverra accumsan in nisl nisi scelerisque eu. Mi proin sed libero enim sed faucibus. Porttitor rhoncus dolor purus non. Lobortis feugiat vivamus at augue eget arcu dictum varius. Mauris sit amet massa vitae tortor condimentum lacinia. Justo laoreet sit amet cursus sit. Sed sed risus pretium quam vulputate. At quis risus sed vulputate odio ut. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus sed.
+      </p>
+    </div>
+    <style>
+      .tos {
+        overflow-y: scroll;
+        height: 400px;
+      }
+    </style>
+    <p>By clicking on <b>Submit,</b> you agree to the terms of use of this website.</p>
+    
+  </div>
+  <div class="tab">
+    <h2>Signing you Up...</h2>
+    <div class="loader" id="loader"></div>
+  </div>
+  
+  <div style="overflow:auto;">
+    <div style="float:right;">
+      <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+      <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+      <button type="submit" id="submit" class="submit" onclick="nextPrev(1)" disabled>Next</button>
+      
+      <style>
+        .loader {
+          border: 16px solid #f3f3f3; /* Light grey */
+          border-top: 16px solid #3498db; /* Blue */
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    </div>
+  </div>
+  <script>
+    var con_div1 = document.getElementById("con-1");
+    var con_p1 = document.getElementById("p-con-1");
+    var icon1 = document.getElementById("icon1");
+
+    var con_div2 = document.getElementById("con-2");
+    var con_p2 = document.getElementById("p-con-2");
+    var icon2 = document.getElementById("icon2");
+
+    var con_div3 = document.getElementById("con-3");
+    var con_p3 = document.getElementById("p-con-3");
+    var icon3 = document.getElementById("icon3");
+
+    var con_div4 = document.getElementById("con-4");
+    var con_p4 = document.getElementById("p-con-4");
+    var icon4 = document.getElementById("icon4");
+
+    submit = document.getElementById("submit");
+
+    let c1 = false;
+    let c2 = false;
+    let c3 = false;
+    let c4 = false;
+    setInterval(function name(params) {
+        p1 = document.getElementById("password1").value;
+        p2 = document.getElementById("password2").value;
+        
+
+        if (p1.length < 8){
+            con_div1.style.backgroundColor = "rgba(255, 0, 0, 0.429)";
+            con_div1.style.color = "red";
+            con_p1.style.color = "red";
+            con_div1.style.border = "0.5px solid red";
+            icon1.name = "close-outline";
+            c1 = false;
+        } else {
+            con_div1.style.backgroundColor = "#04aa6d53";
+            con_div1.style.color = "green";
+            con_p1.style.color = "green";
+            con_div1.style.border = "0.5px solid green";
+            icon1.name = "checkmark-outline";
+            c1 = true;
+        }
+        var upper = 0;
+        var lower = 0;
+        var punc = 0;
+        
+        if (p1.length > 0) {
+          for (let i = 0; i < p1.length; i++) {
+            if (/[A-Z]/.test(p1[i])) {
+              upper += 1
+            }
+            if (/[a-z]/.test(p1[i])) {
+              lower += 1
+            }
+            if (/[,.:;!?]/.test(p1[i])) {
+              punc += 1
+            }
+            
+            
+        }
+        
+        }
+        else {
+          con_div2.style.backgroundColor = "rgba(255, 0, 0, 0.429)";
+          con_div2.style.color = "red";
+          con_p2.style.color = "red";
+          con_div2.style.border = "0.5px solid red";
+          icon2.name = "close-outline";
+          con_div3.style.backgroundColor = "rgba(255, 0, 0, 0.429)";
+          con_div3.style.color = "red";
+          con_p3.style.color = "red";
+          con_div3.style.border = "0.5px solid red";
+          icon3.name = "close-outline";
+          con_div4.style.backgroundColor = "rgba(255, 0, 0, 0.429)";
+          con_div4.style.color = "red";
+          con_p4.style.color = "red";
+          con_div4.style.border = "0.5px solid red";
+          icon4.name = "close-outline";
+        }
+        if (upper > 0) {
+          con_div2.style.backgroundColor = "#04aa6d53";
+          con_div2.style.color = "green";
+          con_p2.style.color = "green";
+          con_div2.style.border = "0.5px solid green";
+          icon2.name = "checkmark-outline";
+          c2 = true;
+        }
+        else {
+          con_div2.style.backgroundColor = "rgba(255, 0, 0, 0.429)";
+          con_div2.style.color = "red";
+          con_p2.style.color = "red";
+          con_div2.style.border = "0.5px solid red";
+          icon2.name = "close-outline";
+          c2 = false;
+        }
+
+        if (lower > 0) {
+          con_div3.style.backgroundColor = "#04aa6d53";
+          con_div3.style.color = "green";
+          con_p3.style.color = "green";
+          con_div3.style.border = "0.5px solid green";
+          icon3.name = "checkmark-outline";
+          c3 = true;
+        }
+        else {
+          con_div3.style.backgroundColor = "rgba(255, 0, 0, 0.429)";
+          con_div3.style.color = "red";
+          con_p3.style.color = "red";
+          con_div3.style.border = "0.5px solid red";
+          icon3.name = "close-outline";
+          c3 = false;
+        }
+        
+        if (punc > 0) {
+          con_div4.style.backgroundColor = "#04aa6d53";
+          con_div4.style.color = "green";
+          con_p4.style.color = "green";
+          con_div4.style.border = "0.5px solid green";
+          icon4.name = "checkmark-outline";
+          c4 = true;
+          
+        }
+        else {
+          con_div4.style.backgroundColor = "rgba(255, 0, 0, 0.429)";
+          con_div4.style.color = "red";
+          con_p4.style.color = "red";
+          con_div4.style.border = "0.5px solid red";
+          icon4.name = "close-outline";
+          c4 = false;
+        }
+        
+        if (c1 && c2 && c3 && c4) {
+          console.log("Correct")
+          document.getElementById("submit").style.backgroundColor = "green";
+          document.getElementById("submit").disabled = false;
+          
+        }
+        else {
+          document.getElementById("submit").style.backgroundColor = "grey";
+          document.getElementById("submit").disabled = true;
+        }
+        console.log(c1, c2, c3, c4)
+        
+    }, 10)
+  </script>
+  <!-- Circles which indicates the steps of the form: -->
+  <div style="text-align:center;margin-top:40px;">
+    <span class="step"></span>
+    <span class="step"></span>
+    
+  </div>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+$(window).keydown(function(event){
+  if(event.keyCode == 13) {
+    event.preventDefault();
+    return false;
+  }
+});
+});
+
+setInterval(function name(params) {
+    password1 = document.getElementById("password1").value;
+    password2 = document.getElementById("password2").value;
+    
+    if ((password1.length < 8)) {
+        document.getElementById("submit").disabled = true;
+        document.getElementById("submit").style.backgroundColor = 'grey';
+    } 
+    if ((password1 === password2)) {
+        document.getElementById("submit").disabled = true;
+        document.getElementById("submit").style.backgroundColor = 'grey';
+    } 
+    if ((password1.length < 8)) {
+        document.getElementById("submit").disabled = true;
+        document.getElementById("submit").style.backgroundColor = 'grey';
+    } 
+    if ((password1.length < 8)) {
+        document.getElementById("submit").disabled = true;
+        document.getElementById("submit").style.backgroundColor = 'grey';
+    } 
+    
+    else {
+        document.getElementById("submit").disabled = false;
+        document.getElementById("submit").style.backgroundColor = 'green';
+    }
+
+    
+}, 10)
+// $(document).on('click', '#submit',function(e){
+//     $.ajax({
+//           url : "{% url 'signup' %}", // the endpoint
+//           type : "POST", // http method
+//           data : {fname : $('#fname').val(),
+//                   lname : $('#lname').val(),
+//                   email : $('#email').val(),
+//                   phone : $('#phone').val(),
+//                   password1 : $('#password1').val(),
+//                   password2 : $('#password2').val(),
+//                   csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+//                   action: 'post' }, // data sent with the post request
+
+//           // handle a successful response
+//           success : function() {
+//               // remove the value from the input
+//               // log the returned json to the console
+//               console.log("success"); // another sanity check
+//           },
+
+//           // handle a non-successful response
+//           })
+// })
+
+
+var currentTab = 0; // Current tab is set to be the first tab (0)
+showTab(currentTab); // Display the current tab
+
+function showTab(n) {
+  // This function will display the specified tab of the form...
+  var x = document.getElementsByClassName("tab");
+  x[n].style.display = "block";
+  //... and fix the Previous/Next buttons:
+  next = document.getElementById("nextBtn");
+  prev = document.getElementById("prevBtn");
+  submit = document.getElementById("submit");
+  verify = document.getElementById("verify");
+  loader = document.getElementById("loader");
+  if (n == 0) {
+    prev.style.display = "none";
+    next.style.display = "inline";
+    submit.style.display = 'none';
+    verify.style.display = 'none';
+    submit.style.disabled = true;
+    verify.style.disabled = true;
+    loader.style.display = 'none';
+  }
+  if (n == 1) {
+    prev.style.display = "inline";
+    next.style.display = "none";
+    submit.style.display = 'inline';
+    verify.style.display = 'none';
+    submit.style.disabled = false;
+    verify.style.disabled = true;
+    loader.style.display = 'none';
+  }
+  if (n == 2) {
+    prev.style.display = "none";
+    next.style.display = "none";
+    submit.style.display = 'none';
+    verify.style.display = 'none';
+    submit.style.disabled = true;
+    verify.style.disabled = true;
+    loader.style.display = 'inline';
+    n = 0;
+  }
+  
+
+  
+  //... and run a function that will display the correct step indicator:
+  fixStepIndicator(n)
+}
+
+function nextPrev(n) {
+  // This function will figure out which tab to display
+  var x = document.getElementsByClassName("tab");
+  // Exit the function if any field in the current tab is invalid:
+  if (n == 1 && !validateForm()) return false;
+  // Hide the current tab:
+  x[currentTab].style.display = "none";
+  // Increase or decrease the current tab by 1:
+  currentTab = currentTab + n;
+  // if you have reached the end of the form...
+  if (currentTab >= x.length) {
+    // ... the form gets submitted:
+    document.getElementById("regForm").submit();
+    return false;
+  }
+  // Otherwise, display the correct tab:
+  showTab(currentTab);
+}
+
+function validateForm() {
+  // This function deals with validation of the form fields
+  var x, y, i, valid = true;
+  x = document.getElementsByClassName("tab");
+  y = x[currentTab].getElementsByTagName("input");
+  // A loop that checks every input field in the current tab:
+  for (i = 0; i < y.length; i++) {
+    // If a field is empty...
+    if (y[i].value == "") {
+      // add an "invalid" class to the field:
+      y[i].className += " invalid";
+      // and set the current valid status to false
+      valid = false;
+    }
+  }
+  // If the valid status is true, mark the step as finished and valid:
+  if (valid) {
+    document.getElementsByClassName("step")[currentTab].className += " finish";
+  }
+  return valid; // return the valid status
+}
+
+function fixStepIndicator(n) {
+  // This function removes the "active" class of all steps...
+  var i, x = document.getElementsByClassName("step");
+  for (i = 0; i < x.length; i++) {
+    x[i].className = x[i].className.replace(" active", "");
+  }
+  //... and adds the "active" class on the current step:
+  x[n].className += " active";
+}
+</script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
